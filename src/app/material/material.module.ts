@@ -15,6 +15,13 @@ import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDialogModule} from '@angular/material/dialog';
+// table start
+import {MatTableModule} from '@angular/material/table';
+// table sorting: 
+import { MatSortModule } from '@angular/material/sort';
+// paginator 
+import {MatPaginatorModule} from '@angular/material/paginator';
+// table end
 
 
 @NgModule({
@@ -33,7 +40,10 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatCardModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   exports: [
     MatButtonModule, 
@@ -49,7 +59,10 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatCardModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ]
 
 })
