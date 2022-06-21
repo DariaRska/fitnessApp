@@ -1,3 +1,6 @@
+//  npm install angularfire2 firebase --save
+// stara wejsja 
+
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Exercise } from './exercise.model';
