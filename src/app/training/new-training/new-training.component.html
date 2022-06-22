@@ -18,6 +18,12 @@
             >
               {{ exercise.name }}
             </mat-option>
+            <!-- <mat-option
+              *ngFor="let exercise of exercises | async"
+              [value]="exercise.id"
+            >
+              {{ exercise.name }}
+            </mat-option> -->
           </mat-select>
         </mat-form-field>
       </mat-card-content>
