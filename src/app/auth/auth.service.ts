@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-// import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { UiService } from '../shared/ui.service';
 import { TrainingService } from '../training/training.service';
 import { AuthData } from './auth-data.model';
+import { Store } from '@ngrx/store';
+import * as formApp from '../app.reducer';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class AuthService {
     private router: Router,
     private afAuth: AngularFireAuth,
     private trainingService: TrainingService,
-    // private snackbar: MatSnackBar,
-    private uiService: UiService
+    private uiService: UiService,
+    private store: Store<formApp.State>
     ) { }
 
     initAuthListener() {
@@ -38,28 +39,28 @@ export class AuthService {
     }
 
   registerUser(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    // this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({type: 'START_LOADING'});
     this.afAuth.createUserWithEmailAndPassword(authData.email, authData.password).then(result => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STAP_LOADING'});
     })
     .catch(error => {
       this.uiService.loadingStateChanged.next(false);
-      /* zamiast null mozna dodac acion z button, ktory zamyka powiadomienie, ale tutaj jest duration po ktorym znika
-      this.snackbar.open(error.message, null, {
-        duration: 3000
-      })
-      */
      this.uiService.showSnackbar(error.message, null, 3000);
     })
   }
 
   login(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    // this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({type: 'START_LOADING'});
     this.afAuth.signInWithEmailAndPassword(authData.email, authData.password).then(result => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STAP_LOADING'});
     })
     .catch(error => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STAP_LOADING'});
       this.uiService.showSnackbar(error.message, null, 3000);
     })
   }
