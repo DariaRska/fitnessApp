@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from './auth/auth.service';
 
 
 @Component({
@@ -6,9 +7,11 @@ import { Component, ViewChild } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  onToggle() {
-    //
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.initAuthListener();
   }
 }
