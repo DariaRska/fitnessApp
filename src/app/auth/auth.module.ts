@@ -1,11 +1,9 @@
-import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { FlexLayoutModule } from "@angular/flex-layout";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MaterialModule } from "../material/material.module";
+import { ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "./login/login.component";
 import { SignupComponent } from "./signup/signup.component";
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
     declarations: [
@@ -14,11 +12,9 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
     ],
     // kazdy modul, zeby miec dostep do wszytskiego musi miec swoje importy
     imports: [
-        CommonModule,
-        FormsModule,
+        // w sharedmodule wszytkie rzeczy, ktore sa potrzebne bez powtarzania
+        SharedModule,
         ReactiveFormsModule,
-        MaterialModule,
-        FlexLayoutModule,
         AngularFireAuthModule,
     ],
     exports: []
