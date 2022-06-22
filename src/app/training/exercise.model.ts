@@ -6,4 +6,3 @@ export interface Exercise {
     date?: Date;
     state?: 'completed' | 'cancelled' | null
 }
-// state ma trzy opcje

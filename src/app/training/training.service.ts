@@ -1,6 +1,3 @@
-//  npm install angularfire2 firebase --save
-// stara wejsja 
-
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map, Subject, Subscription } from 'rxjs';
@@ -38,9 +35,6 @@ export class TrainingService {
       this.availableExercises = exercises;
       this.exercisesChanged.next([...this.availableExercises]);
     }))
-    // , error => {
-    //   // console.log(error);
-    // }
   }
 
   getRunningExerercise() {
@@ -48,14 +42,11 @@ export class TrainingService {
   }
 
   startExercise(selectedId: string) {
-    // updateone document with new data 
-    // this.db.doc('availableExercises' + selectedId).update({lastSelected: new Date()});
     this.runnningExercise = this.availableExercises.find(ex => ex.id === selectedId);
     this.exerciseChanged.next({...this.runnningExercise});
   }
 
   completeEcercise() {
-    // this.exercises.push({
     this.addDataToDatabase({
       ...this.runnningExercise, 
       date: new Date(), 
@@ -66,7 +57,6 @@ export class TrainingService {
   }
 
   cancelExercise(progress:any) {
-    // this.exercises.push({
     this.addDataToDatabase({
       ...this.runnningExercise, 
       duration: this.runnningExercise.duration * (progress / 100),
@@ -91,24 +81,6 @@ export class TrainingService {
   }
 
   private addDataToDatabase(exercise: Exercise) {
-    // zwraca promise, jak nie ma collection, to ja tworzy
     this.db.collection('finishedExercises').add(exercise);
   }
 }
-
-
-  // private availableExercises: Exercise[] = [
-  //   {id: 'crunches', name: 'Crunches', duration: 30, calories: 8},
-  //   {id: 'touch-toes', name: 'Touch Toues', duration: 180, calories: 15},
-  //   {id: 'side-lunges', name: 'Side Lunges', duration: 120, calories: 18},
-  //   {id: 'burpees', name: 'Burpees', duration: 60, calories: 8},
-  // ];
-
-    // getAvailableExercises() {
-  //   // przez slice tworzymy nowa, ktora nie wplynie na oryginal
-  //   return this.availableExercises.slice();
-  // }
-
-  // getCompletedOrCanceledExercises() {
-  //   return this.exercises.slice();
-  // }
