@@ -7,7 +7,8 @@ import { AuthGuard } from '../auth/auth.guard';
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent },
-  { path: 'training', component: TrainingComponent, canActivate: [AuthGuard] },
+  // lazy loading: 
+  { path: 'training', loadChildren: () => import('../training/training.module').then(m => m.TrainingModule)},
 ];
 
 
