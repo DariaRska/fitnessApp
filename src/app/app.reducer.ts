@@ -1,22 +1,15 @@
+import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
+import * as formUi from './shared/ui.reducer';
+
 export interface State {
-    isLoading: boolean;
+    ui: formUi.State;
 }
 
-const initialState = {
-    isLoading: false
+export const reducers: ActionReducerMap<State> = {
+    ui: formUi.uiReducer
 }
 
-export function appReducer(state = initialState, action) {
-    switch (action.type) {
-        case 'START_LOADING':
-            return {
-                isLoading: true
-            };
-            case 'STOP_LOADING':
-                return {
-                    isLoading: false
-                };
-                default: 
-                return state
-    }
-}
+// od razu zwraca state.ui, nie trzeba sie tak odwolywac juz 
+export const getUiState = createFeatureSelector<formUi.State>('ui');
+
+export const getIsLoading = createSelector(getUiState, formUi.getIsLoading);

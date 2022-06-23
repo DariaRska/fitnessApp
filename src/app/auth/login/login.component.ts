@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { map, Observable, Subscription } from 'rxjs';
 import { UiService } from 'src/app/shared/ui.service';
 import { AuthService } from '../auth.service';
-import * as fromApp from '../../app.reducer';
+import * as formRoot from '../../app.reducer';
 
 @Component({
   selector: 'app-login',
@@ -20,11 +20,12 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private uiService: UiService,
-    private store: Store<fromApp.State>
+    private store: Store<formRoot.State>
     ) { }
 
   ngOnInit(): void {
-    this.isLoading$ = this.store.pipe(map(state => state['ui'].isLoading))
+    // this.isLoading$ = this.store.pipe(map(state => state['ui'].isLoading));
+    this.isLoading$ = this.store.select(formRoot.getIsLoading);
     this.store.subscribe(data => console.log(data['ui'].isLoading));
     this.loginForm = new FormGroup({
       email: new FormControl('', {validators: [Validators.required, Validators.email]}),
