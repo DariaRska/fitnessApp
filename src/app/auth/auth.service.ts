@@ -49,7 +49,8 @@ export class AuthService {
       this.store.dispatch(new UI.StopLoading());
     })
     .catch(error => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch(new UI.StopLoading());
      this.uiService.showSnackbar(error.message, null, 3000);
     })
   }
