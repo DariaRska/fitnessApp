@@ -3,9 +3,11 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map, Subject, Subscription } from 'rxjs';
 import { UiService } from '../shared/ui.service';
 import { Exercise } from './exercise.model';
-import * as fromRoot from '../app.reducer';
+// import * as fromRoot from '../app.reducer';
 import * as UI from '../shared/ui.actions';
 import { Store } from '@ngrx/store';
+import * as ftomTraining from './training.reducer';
+import * as Training from './training.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,8 @@ export class TrainingService {
   constructor(
     private db: AngularFirestore,
     private uiService: UiService,
-    private store: Store<fromRoot.State>
+    // z training state mamy dostep do global state, bo trainingState extends global, ale global nie wie o training state, dltego z global nie mamy dostepu do training state
+    private store: Store<ftomTraining.State>
     ) { }
 
   fetchAvailableExercises() {
@@ -45,8 +48,9 @@ export class TrainingService {
     ).subscribe((exercises: Exercise[]) => {
       // this.uiService.loadingStateChanged.next(false);
       this.store.dispatch(new UI.StopLoading());
-      this.availableExercises = exercises;
-      this.exercisesChanged.next([...this.availableExercises]);
+      // this.availableExercises = exercises;
+      // this.exercisesChanged.next([...this.availableExercises]);
+      this.store.dispatch(new Training.SetAvailableTrainings(exercises));
     }, error => {
       // this.uiService.loadingStateChanged.next(false);
       this.store.dispatch(new UI.StopLoading());
@@ -60,8 +64,9 @@ export class TrainingService {
   }
 
   startExercise(selectedId: string) {
-    this.runnningExercise = this.availableExercises.find(ex => ex.id === selectedId);
-    this.exerciseChanged.next({...this.runnningExercise});
+    // this.runnningExercise = this.availableExercises.find(ex => ex.id === selectedId);
+    // this.exerciseChanged.next({...this.runnningExercise});
+    this.store.dispatch(new Training.StartTraining(selectedId));
   }
 
   completeEcercise() {
@@ -70,8 +75,9 @@ export class TrainingService {
       date: new Date(), 
       state: 'completed' 
     });
-    this.runnningExercise = null;
-    this.exerciseChanged.next(null);
+    // this.runnningExercise = null;
+    // this.exerciseChanged.next(null);
+    this.store.dispatch(new Training.StopTraining());
   }
 
   cancelExercise(progress:any) {
@@ -82,15 +88,17 @@ export class TrainingService {
       date: new Date(), 
       state: 'cancelled' 
     });
-    this.runnningExercise = null;
-    this.exerciseChanged.next(null);
+    // this.runnningExercise = null;
+    // this.exerciseChanged.next(null);
+    this.store.dispatch(new Training.StopTraining());
   }
 
   fetchCompletedOrCanceledExercises() {
     this.fbSubscription.push(this.db.collection('finishedExercises')
     .valueChanges()
     .subscribe((exercises: Exercise[]) => {
-      this.finishedExercisesChanged.next(exercises);
+      // this.finishedExercisesChanged.next(exercises);
+      this.store.dispatch(new Training.SetFinishedTrainings(exercises));
     }));
   }
 
