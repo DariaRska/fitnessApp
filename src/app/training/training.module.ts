@@ -7,6 +7,9 @@ import { TrainingComponent } from "./training.component";
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { SharedModule } from "../shared/shared.module";
 import { TrainingRoutingModule } from "./training-routing-module";
+import { StoreModule } from "@ngrx/store";
+import { trainingReducer } from "./training.reducer";
+
 
 @NgModule({
     declarations: [
@@ -19,7 +22,9 @@ import { TrainingRoutingModule } from "./training-routing-module";
     imports: [
         SharedModule,
         AngularFirestoreModule,
-        TrainingRoutingModule
+        TrainingRoutingModule,
+        // deklarujemy tutaj a nie w glownym app reducer, bo to jest lazy loading
+        StoreModule.forFeature('training', trainingReducer)
     ],
     exports: [],
 })

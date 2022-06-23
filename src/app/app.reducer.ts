@@ -5,6 +5,7 @@ import * as fromAuth from './auth/auth.reducer';
 export interface State {
     ui: fromUi.State;
     auth: fromAuth.State;
+    // training reducer w training.module - przez lazy loading
 }
 
 export const reducers: ActionReducerMap<State> = {
