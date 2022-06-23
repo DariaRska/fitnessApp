@@ -6,6 +6,7 @@ import {  Observable, Subscription } from 'rxjs';
 import { UiService } from 'src/app/shared/ui.service';
 import * as fromRoot from '../../app.reducer';
 import { Store } from '@ngrx/store';
+import * as fromTraining from '../training.reducer';
 
 @Component({
   selector: 'app-new-training',
@@ -13,7 +14,8 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./new-training.component.css']
 })
 export class NewTrainingComponent implements OnInit {
-  exercises: Exercise[] = [];
+  // exercises: Exercise[] = [];
+  exercises$: Observable<Exercise[]>;
   exerciseSubscription: Subscription;
   // isLoading: boolean = true;
   isLoading$:Observable<boolean>;
@@ -22,7 +24,8 @@ export class NewTrainingComponent implements OnInit {
   constructor(
     private trainingService: TrainingService,
     private uiService: UiService,
-    private store: Store<fromRoot.State>
+    // private store: Store<fromRoot.State>
+    private store: Store<fromTraining.State>
     ) { }
 
   ngOnInit(): void {
@@ -31,11 +34,12 @@ export class NewTrainingComponent implements OnInit {
     // }
     // );
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.exerciseSubscription = this.trainingService.exercisesChanged.subscribe(exercises => {
-      // TAK LUB, TAK JAK JEST PRZEZ UIsERVICE POWYZEJ
-      // this.isLoading = false;
-      this.exercises = exercises;
-    });
+    // this.exerciseSubscription = this.trainingService.exercisesChanged.subscribe(exercises => {
+    //   // TAK LUB, TAK JAK JEST PRZEZ UIsERVICE POWYZEJ
+    //   // this.isLoading = false;
+    //   this.exercises = exercises;
+    // });
+    this.exercises$ = this.store.select(fromTraining.getAvailableExercises);
     this.fetchExercises();
   }
 

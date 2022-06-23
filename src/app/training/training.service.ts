@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map, Subject, Subscription } from 'rxjs';
+import { map, Subject, Subscription, take } from 'rxjs';
 import { UiService } from '../shared/ui.service';
 import { Exercise } from './exercise.model';
 // import * as fromRoot from '../app.reducer';
 import * as UI from '../shared/ui.actions';
 import { Store } from '@ngrx/store';
-import * as ftomTraining from './training.reducer';
+import * as fromTraining from './training.reducer';
 import * as Training from './training.actions';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class TrainingService {
     private db: AngularFirestore,
     private uiService: UiService,
     // z training state mamy dostep do global state, bo trainingState extends global, ale global nie wie o training state, dltego z global nie mamy dostepu do training state
-    private store: Store<ftomTraining.State>
+    private store: Store<fromTraining.State>
     ) { }
 
   fetchAvailableExercises() {
@@ -59,9 +59,9 @@ export class TrainingService {
     }))
   }
 
-  getRunningExerercise() {
-    return {...this.runnningExercise};
-  }
+  // getRunningExerercise() {
+  //   return {...this.runnningExercise};
+  // }
 
   startExercise(selectedId: string) {
     // this.runnningExercise = this.availableExercises.find(ex => ex.id === selectedId);
@@ -70,27 +70,48 @@ export class TrainingService {
   }
 
   completeEcercise() {
-    this.addDataToDatabase({
-      ...this.runnningExercise, 
-      date: new Date(), 
-      state: 'completed' 
-    });
+    this.store.select(fromTraining.getActiveExercise)
+    // nie interesuja nas zmiany tylko raz bierzemy informacje i unsub
+    .pipe(take(1))
+    .subscribe(ex => {
+      this.addDataToDatabase({
+        ...ex, 
+        date: new Date(), 
+        state: 'completed' 
+      });
+      this.store.dispatch(new Training.StopTraining());
+    })
+    // this.addDataToDatabase({
+    //   ...this.runnningExercise, 
+    //   date: new Date(), 
+    //   state: 'completed' 
+    // });
     // this.runnningExercise = null;
     // this.exerciseChanged.next(null);
-    this.store.dispatch(new Training.StopTraining());
   }
 
   cancelExercise(progress:any) {
-    this.addDataToDatabase({
-      ...this.runnningExercise, 
-      duration: this.runnningExercise.duration * (progress / 100),
-      calories: this.runnningExercise.calories * (progress / 100),
-      date: new Date(), 
-      state: 'cancelled' 
-    });
+    this.store.select(fromTraining.getActiveExercise)
+    .pipe(take(1))
+    .subscribe(ex => {
+      this.addDataToDatabase({
+        ...ex, 
+        duration: ex.duration * (progress / 100),
+      calories: ex.calories * (progress / 100),
+        date: new Date(), 
+        state: 'completed' 
+      });
+      this.store.dispatch(new Training.StopTraining());
+    })
+    // this.addDataToDatabase({
+    //   ...this.runnningExercise, 
+    //   duration: this.runnningExercise.duration * (progress / 100),
+    //   calories: this.runnningExercise.calories * (progress / 100),
+    //   date: new Date(), 
+    //   state: 'cancelled' 
+    // });
     // this.runnningExercise = null;
-    // this.exerciseChanged.next(null);
-    this.store.dispatch(new Training.StopTraining());
+    // this.exerciseChanged.next(null); 
   }
 
   fetchCompletedOrCanceledExercises() {
