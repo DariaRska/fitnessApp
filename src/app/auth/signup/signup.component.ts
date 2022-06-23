@@ -13,9 +13,7 @@ import { Store } from '@ngrx/store';
 })
 export class SignupComponent implements OnInit {
   maxDate:any;
-  // isLoading:boolean = false;
   isLoading$:Observable<boolean>;
-  // loadingSubscription: Subscription;
   
   constructor(
     private authService: AuthService,
@@ -26,7 +24,6 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.maxDate = new Date();
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
-    // this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(isLoading => this.isLoading = isLoading);
     this.isLoading$ = this.store.select(formRoot.getIsLoading);
   }
 
@@ -36,11 +33,5 @@ export class SignupComponent implements OnInit {
       password: form.value.password,
     });
   }
-
-  // ngOnDestroy(): void {
-  //   if (this.loadingSubscription) {
-  //     this.loadingSubscription.unsubscribe();
-  //   }
-  // }
 
 }

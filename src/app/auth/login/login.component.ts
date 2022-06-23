@@ -13,9 +13,7 @@ import * as formRoot from '../../app.reducer';
 })
 export class LoginComponent implements OnInit {
   loginForm:any;
-  // isLoading:boolean = false;
   isLoading$:Observable<boolean>;
-  // loadingSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -24,14 +22,12 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    // this.isLoading$ = this.store.pipe(map(state => state['ui'].isLoading));
     this.isLoading$ = this.store.select(formRoot.getIsLoading);
     this.store.subscribe(data => console.log(data['ui'].isLoading));
     this.loginForm = new FormGroup({
       email: new FormControl('', {validators: [Validators.required, Validators.email]}),
       password: new FormControl('', {validators: [Validators.required]}),
     });
-    // this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(isLoading => this.isLoading = isLoading)
   }
 
   onSubmit() {
@@ -40,11 +36,4 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value.password,
     })
   }
-
-  // ngOnDestroy(): void {
-  //   if (this.loadingSubscription) {
-  //     this.loadingSubscription.unsubscribe();
-  //   }
-  // }
-
 }

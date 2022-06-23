@@ -11,9 +11,7 @@ import { AuthRoutingModule } from "./auth-routing.module";
         SignupComponent,
         LoginComponent,
     ],
-    // kazdy modul, zeby miec dostep do wszytskiego musi miec swoje importy
     imports: [
-        // w sharedmodule wszytkie rzeczy, ktore sa potrzebne bez powtarzania
         SharedModule,
         ReactiveFormsModule,
         AngularFireAuthModule,
